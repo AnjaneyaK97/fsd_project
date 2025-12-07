@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en" ng-app="blogApp">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Blog</title>
+    <link rel="stylesheet" href="styles.css" />
+    <!-- AngularJS via CDN (classic MEAN) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.3/angular.min.js"></script>
+    <script src="app.js" defer></script>
+  </head>
+  <body ng-controller="MainCtrl as vm">
+    <header>
+      <h1>Blog Engine</h1>
+      <p class="muted">MEAN Stack • MongoDB • Express • AngularJS • Node</p>
+    </header>
+
+    <section class="composer">
+      <h2>{{ vm.editing ? 'Edit Post' : 'New Post' }}</h2>
+      <form ng-submit="vm.savePost()">
+        <input type="text" ng-model="vm.form.title" placeholder="Post title" required />
+        <input type="text" ng-model="vm.form.author" placeholder="Author (optional)" />
+        <textarea ng-model="vm.form.content" placeholder="Write your post..." required></textarea>
+        <div class="actions">
+          <button type="submit">{{ vm.editing ? 'Update' : 'Publish' }}</button>
+          <button type="button" class="secondary" ng-click="vm.reset()">Clear</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="feed">
+      <h2>Posts</h2>
+      <div class="post" ng-repeat="p in vm.posts">
+        <div class="post-head">
+          <h3>{{ p.title }}</h3>
+          <div class="meta">
+            <span>{{ p.author || 'Anonymous' }}</span>
+            <span> • </span>
+            <span>{{ p.createdAt | date:'medium' }}</span>
+          </div>
+        </div>
+        <p class="content" ng-bind="p.content"></p>
+        <div class="row-actions">
+          <button ng-click="vm.startEdit(p)">Edit</button>
+          <button class="danger" ng-click="vm.deletePost(p)">Delete</button>
+        </div>
+      </div>
+
+      <p ng-if="!vm.posts.length" class="empty">No posts yet. Be the first to publish!</p>
+    </section>
+
+    <footer>
+      <small> Single file frontend</small>
+    </footer>
+  </body>
+</html>
